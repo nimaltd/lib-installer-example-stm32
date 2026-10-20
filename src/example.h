@@ -1,7 +1,7 @@
 /**
  * @file        example.h
  * @brief       A small library made to try stm32-installer on: a period that never blocks.
- * @version     1.0.0
+ * @version     1.1.0
  *
  * @author      Nima Askari (NimaLTD)
  * @email       nima.askari@gmail.com
@@ -85,6 +85,12 @@ bool example_due(example_t *handle);
  * @brief How many times example_due() has said yes.
  */
 uint32_t example_count(const example_t *handle);
+
+/*****************************************************************************************************/
+/**
+ * @brief This device's own ID, from the example_id.h the make-id step made, or 0.
+ */
+uint32_t example_id(void);
 
 #ifdef __cplusplus
 }

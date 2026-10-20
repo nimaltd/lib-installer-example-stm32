@@ -20,10 +20,17 @@ category: timing                   # sensor, storage, display, communication, wi
 provides: []                       # what it gives other libraries: [rtos] for an RTOS
 
 requires:
-  installer: 1.9.0                 # the oldest stm32-installer that reads this file
+  stm32_installer: 2.0.0           # the oldest stm32-installer that reads this file;
+                                   # 2.0.0 for run below. Older installers read only
+                                   # installer: write that instead to stop them too
   libraries: []                    # other libraries, installed first when missing:
-                                   #   - osal >= 1.0.0   no owner means nimaltd
-                                   #   - owner/lib       anyone else's
+                                   #   - osal >= 1.0.0       no owner means nimaltd
+                                   #   - owner/lib           anyone else's
+                                   #   - owner/lib@v1.2.0    a tag, branch or commit
+                                   #   - source: owner/other@v2.0.0
+                                   #     manifest: manifests/other.yml
+                                   #                         for a repository with no
+                                   #                         installer.yml of its own
   hal: true                        # uses HAL_GetTick
   cmsis: false                     # uses CMSIS directly
   rtos: optional                   # none, optional, any, freertos, cmsis-os2 or threadx
@@ -62,3 +69,16 @@ extras:                            # copied as they are, never compiled
   - LICENSE.md
   - NOTICE
   - README.md
+
+# once:                            # the project's own files, made when missing and the
+#   - from: templates/notes.md     # user's from then on: never replaced or removed;
+#     to: Docs/example_notes.md    # to: its place in the project, when not its own name
+
+run:                               # steps run once the files are in, each asked first
+  - label: make-id                 # the name typed after --run and --no-run
+    description: Make this board's own ID, Core/Inc/example_id.h   # shown with the question
+    script: scripts/make_id.py     # Python, run with the installer's own Python,
+                                   # or command: [program, arguments], with no shell
+    args: [Core/Inc/example_id.h]  # given to the script, in the project's folder;
+                                   # Core/Inc is on the include path of every IDE
+    unless: Core/Inc/example_id.h  # skipped when this file is there already

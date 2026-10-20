@@ -4,6 +4,8 @@ A small library made to try [stm32-installer](https://github.com/nimaltd/stm32-i
 
 It does one useful thing. `example_due()` says yes once every `EXAMPLE_PERIOD_MS` milliseconds and never blocks, so a main loop can blink an LED, read a sensor or print a line on a rhythm, without `HAL_Delay()` holding everything else up. Its `uptime` option adds `example_uptime()`, the time since start up in hours, minutes and seconds.
 
+It also has a step for stm32-installer 2.0.0 to run, so you can see one work: `make-id` makes `Core/Inc/example_id.h`, this board's own ID, a random number that `example_id()` returns. The installer shows what it runs and asks first.
+
 ---
 
 ## Try the installer with it
@@ -14,19 +16,30 @@ Install the installer once:
 pip install stm32-installer
 ```
 
+It needs stm32-installer 2.0.0 or newer. `pip install --upgrade stm32-installer` brings an older one up to date.
+
 Then, from the root of any STM32 project CubeMX made, for STM32CubeIDE, CMake, Keil, IAR or a Makefile:
 
 ```bash
 stm32-installer nimaltd/stm32-installer-example
 ```
 
-It asks two things. Press Enter for both, and the library goes into `example/` without its option:
+It asks three things. Press Enter for each, and the library goes into `example/` without its option, and its step runs:
 
 ```
 Options
   uptime     Uptime in hours, minutes and seconds. Add it? [y/N]:
 Folder to install example into [example]:
+...
+Run
+  make-id      Make this board's own ID, Core/Inc/example_id.h
+               python scripts/make_id.py Core/Inc/example_id.h
+               Run it? [Y/n]:
+Made Core/Inc/example_id.h: device 2EA6A6A4.
+               done
 ```
+
+`Core/Inc` is on the include path of every IDE CubeMX makes a project for, which is how `example.c` finds the file.
 
 Then use it in `main.c`, between CubeMX's `USER CODE` lines so CubeMX keeps it:
 
@@ -71,6 +84,12 @@ Run the same install command again. Every file of the library is written again, 
   kept    example/src/example_config.h  your USER CODE EXAMPLE_CONFIGURATION
 ```
 
+**Its board ID.** `example_id()` returns the number in `Core/Inc/example_id.h`, made for this project alone. Run the install again, and the step is not asked about: `make-id skipped, Core/Inc/example_id.h is already there`, so the ID never changes under a board already in use. Delete the file, and the next install asks again and makes a new one. Answer for it on the command line instead, with `--run make-id` to run it or `--no-run make-id` to leave it, and `--yes` takes every answer offered, for a script. Nobody to answer, and it is not run; then `example_id()` is 0.
+
+```c
+uint32_t id = example_id();   /* this board's own, 0 when the step was not run */
+```
+
 **Add a part, and take it out.** `--with uptime` adds `example_uptime.h` and `example_uptime.c`, and registers them with your IDE. `--without uptime` takes them out of both again.
 
 ```bash
@@ -81,7 +100,7 @@ stm32-installer nimaltd/stm32-installer-example --with uptime
 example_uptime_t up = example_uptime();   /* up.hours, up.minutes, up.seconds */
 ```
 
-**Uninstall it.** The library leaves every IDE project it was put in, and then its files go. What you changed in `example_config.h` is saved beside it first:
+**Uninstall it.** The library leaves every IDE project it was put in, and then its files go. What you changed in `example_config.h` is saved beside it first. `Core/Inc/example_id.h` stays, since it is yours:
 
 ```bash
 stm32-installer --uninstall example
@@ -105,7 +124,7 @@ Then anyone installs your library with:
 stm32-installer yourname/yourlibrary
 ```
 
-A configuration file with `USER CODE BEGIN` and `USER CODE END` lines, like `example_config.h`, keeps the user's settings on every update. The [stm32-installer README](https://github.com/nimaltd/stm32-installer#for-someone-writing-a-library) has the rest.
+A configuration file with `USER CODE BEGIN` and `USER CODE END` lines, like `example_config.h`, keeps the user's settings on every update. `run` lists the steps run after the install, with the script in [`scripts/make_id.py`](scripts/make_id.py). The [stm32-installer README](https://github.com/nimaltd/stm32-installer#for-someone-writing-a-library) has the rest.
 
 ---
 
@@ -116,6 +135,7 @@ A configuration file with `USER CODE BEGIN` and `USER CODE END` lines, like `exa
 | `void example_init(example_t *handle)` | Start a period of `EXAMPLE_PERIOD_MS` from now |
 | `bool example_due(example_t *handle)` | Whether the period has passed. Returns at once, and starts the next one when it has |
 | `uint32_t example_count(const example_t *handle)` | How many times `example_due()` has said yes |
+| `uint32_t example_id(void)` | This board's own ID, from `Core/Inc/example_id.h`, or 0 when the step was not run |
 | `example_uptime_t example_uptime(void)` | With the `uptime` option: hours, minutes and seconds since start up |
 
 Declare one `example_t` for each thing that repeats on its own rhythm. A main loop that comes back late is caught up, so the rhythm does not drift.
