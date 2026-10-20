@@ -4,7 +4,7 @@ A small library made to try [stm32-installer](https://github.com/nimaltd/stm32-i
 
 It does one useful thing. `example_due()` says yes once every `EXAMPLE_PERIOD_MS` milliseconds and never blocks, so a main loop can blink an LED, read a sensor or print a line on a rhythm, without `HAL_Delay()` holding everything else up. Its `uptime` option adds `example_uptime()`, the time since start up in hours, minutes and seconds.
 
-It also has a step for stm32-installer 2.0.0 to run, so you can see one work: `make-id` makes `Core/Inc/example_id.h`, this board's own ID, a random number that `example_id()` returns. The installer shows what it runs and asks first.
+It also has a step for stm32-installer 2.1.0 to run, so you can see one work: `make-id` makes `Core/Inc/example_id.h`, this board's own ID, a random number that `example_id()` returns. The installer shows what it runs and asks first. Its script, `tools/make_id.py`, comes into your project's folder as the library's own.
 
 ---
 
@@ -16,7 +16,7 @@ Install the installer once:
 pip install stm32-installer
 ```
 
-It needs stm32-installer 2.0.0 or newer. `pip install --upgrade stm32-installer` brings an older one up to date.
+It needs stm32-installer 2.1.0 or newer. `pip install --upgrade stm32-installer` brings an older one up to date.
 
 Then, from the root of any STM32 project CubeMX made, for STM32CubeIDE, CMake, Keil, IAR or a Makefile:
 
@@ -33,7 +33,7 @@ Folder to install example into [example]:
 ...
 Run
   make-id      Make this board's own ID, Core/Inc/example_id.h
-               python scripts/make_id.py Core/Inc/example_id.h
+               python tools/make_id.py Core/Inc/example_id.h
                Run it? [Y/n]:
 Made Core/Inc/example_id.h: device 2EA6A6A4.
                done
@@ -100,7 +100,7 @@ stm32-installer nimaltd/stm32-installer-example --with uptime
 example_uptime_t up = example_uptime();   /* up.hours, up.minutes, up.seconds */
 ```
 
-**Uninstall it.** The library leaves every IDE project it was put in, and then its files go. What you changed in `example_config.h` is saved beside it first. `Core/Inc/example_id.h` stays, since it is yours:
+**Uninstall it.** The library leaves every IDE project it was put in, and then its files go. What you changed in `example_config.h` is saved beside it first. `tools/make_id.py` goes with it, and `Core/Inc/example_id.h` stays, since it is yours:
 
 ```bash
 stm32-installer --uninstall example
@@ -124,7 +124,7 @@ Then anyone installs your library with:
 stm32-installer yourname/yourlibrary
 ```
 
-A configuration file with `USER CODE BEGIN` and `USER CODE END` lines, like `example_config.h`, keeps the user's settings on every update. `run` lists the steps run after the install, with the script in [`scripts/make_id.py`](scripts/make_id.py). The [stm32-installer README](https://github.com/nimaltd/stm32-installer#for-someone-writing-a-library) has the rest.
+A configuration file with `USER CODE BEGIN` and `USER CODE END` lines, like `example_config.h`, keeps the user's settings on every update. `run` lists the steps run after the install, with the script in [`tools/make_id.py`](tools/make_id.py). The [stm32-installer README](https://github.com/nimaltd/stm32-installer#for-someone-writing-a-library) has the rest.
 
 ---
 
