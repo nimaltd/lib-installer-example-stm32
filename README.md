@@ -1,4 +1,4 @@
-# lib-installer-stm32
+# lib-installer-example-stm32
 
 A small library made to try [lib-installer](https://github.com/nimaltd/lib-installer) on, and a starting point for making your own library installable.
 
@@ -21,7 +21,7 @@ It needs lib-installer 3.0.0 or newer. `pip install --upgrade lib-installer` bri
 Then, from the root of any STM32 project CubeMX made, for STM32CubeIDE, CMake, Keil, IAR or a Makefile:
 
 ```bash
-lib-installer nimaltd/lib-installer-stm32
+lib-installer nimaltd/lib-installer-example-stm32
 ```
 
 It asks three things. Press Enter for each, and the library goes into `example/` without its option, and its step runs:
@@ -93,7 +93,7 @@ uint32_t id = example_id();   /* this board's own, 0 when the step was not run *
 **Add a part, and take it out.** `--with uptime` adds `example_uptime.h` and `example_uptime.c`, and registers them with your IDE. `--without uptime` takes them out of both again.
 
 ```bash
-lib-installer nimaltd/lib-installer-stm32 --with uptime
+lib-installer nimaltd/lib-installer-example-stm32 --with uptime
 ```
 
 ```c
@@ -109,7 +109,7 @@ lib-installer --uninstall example
 **Without internet.** Download this repository as a zip, from the green **Code** button, **Download ZIP**, and give the installer the zip instead of the name:
 
 ```bash
-lib-installer D:/Downloads/lib-installer-stm32-main.zip
+lib-installer D:/Downloads/lib-installer-example-stm32-main.zip
 ```
 
 ---

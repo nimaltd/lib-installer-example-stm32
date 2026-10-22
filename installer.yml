@@ -15,7 +15,7 @@
 
 name: example                      # the library's name, and its folder in the project
 description: A period that never blocks, made to try lib-installer on
-repository: https://github.com/nimaltd/lib-installer-stm32
+repository: https://github.com/nimaltd/lib-installer-example-stm32
 license: Apache-2.0                # the licence's SPDX name
 platform: stm32                    # the projects it is for: stm32, zephyr, esp32,
                                    # arduino and pio, one or a list of them
