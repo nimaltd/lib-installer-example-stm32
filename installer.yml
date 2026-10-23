@@ -9,9 +9,10 @@
 # There is no version here. The installer reads it from the @version tag in
 # the first header listed, so the source files are the only place it is written.
 #
-# Written for 3.0.0: every file keeps the path it has here, src/example.h
+# Written for 4.0.0: every file keeps the path it has here, src/example.h
 # lands at example/src/example.h, and every path naming a place in the
-# project starts at the project's folder.
+# project starts at the project's folder. A key given twice in one place is
+# refused, where YAML would keep the last without a word.
 
 name: example                      # the library's name, and its folder in the project
 description: A period that never blocks, made to try lib-installer on
@@ -27,7 +28,7 @@ category: timing                   # sensor, storage, display, communication, wi
 provides: []                       # what it gives other libraries: [rtos] for an RTOS
 
 requires:
-  lib_installer: 3.0.0             # the oldest lib-installer that reads this file
+  lib_installer: 4.0.0             # the oldest lib-installer that reads this file
   libraries: []                    # other libraries, installed first when missing:
                                    #   - osal >= 1.0.0       no owner means nimaltd
                                    #   - owner/lib           anyone else's

@@ -1,7 +1,7 @@
 /**
  * @file        example_config.h
  * @brief       Build time configuration for the example library.
- * @version     1.3.0
+ * @version     1.4.0
  *
  * @author      Nima Askari (NimaLTD)
  * @email       nima.askari@gmail.com
